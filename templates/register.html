@@ -25,6 +25,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Poppins:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
 </head>
 <body class="min-h-screen bg-base text-ink font-body">
   <div class="fixed inset-0 -z-10">
@@ -33,7 +34,7 @@
   </div>
 
   <main class="mx-auto flex min-h-screen max-w-xl items-center px-4 py-10">
-    <section class="w-full rounded-3xl bg-white p-8 shadow-xl shadow-zinc-300/60">
+    <section class="page-fade card-lift w-full rounded-3xl bg-white p-8 shadow-xl shadow-zinc-300/60">
       <h1 class="font-display text-3xl">Register</h1>
       <p class="mt-2 text-sm text-zinc-600">Request OTP with your email and role, then verify to complete registration.</p>
 

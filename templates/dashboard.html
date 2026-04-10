@@ -28,6 +28,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Poppins:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
 </head>
 <body class="min-h-screen bg-base text-ink font-body">
   <div class="fixed inset-0 -z-10">
@@ -35,7 +36,7 @@
     <div class="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-amber-200/60 blur-3xl"></div>
   </div>
 
-  <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+  <main class="page-fade mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
     <header class="mb-8 flex flex-wrap items-center justify-between gap-4">
       <div>
         <h1 class="font-display text-3xl sm:text-4xl">Multi-User Task Collaboration</h1>

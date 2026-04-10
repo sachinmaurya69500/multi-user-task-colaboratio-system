@@ -35,6 +35,7 @@ A modern multi-user Kanban task collaboration system built with Flask, MongoDB, 
 |   `-- dashboard.html
 `-- static/
 		|-- auth.js
+		|-- styles.css
 		`-- board.js
 ```
 
