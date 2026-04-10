@@ -78,8 +78,7 @@ python app.py
 
 Open:
 
-- Dashboard UI: `http://127.0.0.1:5000/dashboard`
-- Health JSON: `http://127.0.0.1:5000/`
+- Dashboard UI (login + registration): `http://127.0.0.1:5000/`
 
 ## 2) Collections and Data Model
 

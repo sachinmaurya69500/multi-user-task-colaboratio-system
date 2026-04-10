@@ -96,8 +96,8 @@ def _create_and_send_otp(email: str, purpose: str) -> tuple[bool, str]:
 
 
 @app.get("/")
-def health_check():
-    return jsonify({"ok": True, "message": "Multi-User Task Collaboration API is running"})
+def home_page():
+    return render_template("dashboard.html")
 
 
 @app.get("/dashboard")
