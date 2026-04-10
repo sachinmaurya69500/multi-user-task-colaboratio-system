@@ -39,49 +39,12 @@
     <header class="mb-8 flex flex-wrap items-center justify-between gap-4">
       <div>
         <h1 class="font-display text-3xl sm:text-4xl">Multi-User Task Collaboration</h1>
-        <p class="mt-2 text-sm text-zinc-600">OTP secured auth, role-aware views, instant board updates.</p>
+        <p class="mt-2 text-sm text-zinc-600">Role-aware board with instant task status updates.</p>
       </div>
-      <div id="user-chip" class="hidden rounded-full bg-white px-4 py-2 text-sm shadow"></div>
+      <div id="user-chip" class="rounded-full bg-white px-4 py-2 text-sm shadow"></div>
     </header>
 
-    <section id="auth-section" class="grid gap-6 lg:grid-cols-2">
-      <div class="rounded-2xl bg-white p-6 shadow-lg shadow-zinc-200/70">
-        <h2 class="font-display text-xl">Register</h2>
-        <p class="mt-2 text-sm text-zinc-600">Step 1: Request OTP with email + role. Step 2: Verify OTP.</p>
-
-        <form id="register-request-form" class="mt-4 space-y-3">
-          <input id="register-email" aria-label="Register email" type="email" placeholder="Email" required class="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-2 outline-none focus:border-accent" />
-          <select id="register-role" required class="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-2 outline-none focus:border-accent">
-            <option value="">Select role</option>
-            <option value="Manager">Manager</option>
-            <option value="Member">Member</option>
-          </select>
-          <button class="w-full rounded-xl bg-ink px-4 py-2 font-medium text-white transition hover:opacity-90">Request Registration OTP</button>
-        </form>
-
-        <form id="register-verify-form" class="mt-4 space-y-3">
-          <input id="register-otp" aria-label="Registration OTP" type="text" placeholder="Enter OTP" required class="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-2 outline-none focus:border-accent" />
-          <button class="w-full rounded-xl bg-accent px-4 py-2 font-medium text-white transition hover:bg-teal-700">Verify Registration OTP</button>
-        </form>
-      </div>
-
-      <div class="rounded-2xl bg-white p-6 shadow-lg shadow-zinc-200/70">
-        <h2 class="font-display text-xl">Login</h2>
-        <p class="mt-2 text-sm text-zinc-600">Only verified users can receive login OTP.</p>
-
-        <form id="login-request-form" class="mt-4 space-y-3">
-          <input id="login-email" aria-label="Login email" type="email" placeholder="Email" required class="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-2 outline-none focus:border-accent" />
-          <button class="w-full rounded-xl bg-ink px-4 py-2 font-medium text-white transition hover:opacity-90">Request Login OTP</button>
-        </form>
-
-        <form id="login-verify-form" class="mt-4 space-y-3">
-          <input id="login-otp" aria-label="Login OTP" type="text" placeholder="Enter OTP" required class="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-2 outline-none focus:border-accent" />
-          <button class="w-full rounded-xl bg-accent px-4 py-2 font-medium text-white transition hover:bg-teal-700">Verify Login OTP</button>
-        </form>
-      </div>
-    </section>
-
-    <section id="dashboard-section" class="hidden space-y-6">
+    <section id="dashboard-section" class="space-y-6">
       <div class="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-white p-4 shadow-lg shadow-zinc-200/70">
         <p id="role-note" class="text-sm text-zinc-700"></p>
         <button id="logout-btn" class="rounded-xl bg-zinc-900 px-4 py-2 text-sm font-medium text-white">Logout</button>

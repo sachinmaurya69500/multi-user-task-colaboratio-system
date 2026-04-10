@@ -4,7 +4,7 @@ from functools import wraps
 
 from bson import ObjectId
 from dotenv import load_dotenv
-from flask import Flask, jsonify, request, session, render_template
+from flask import Flask, jsonify, request, session, render_template, redirect, url_for
 from pymongo import MongoClient
 
 from utils import generate_otp, hash_otp, verify_otp, send_otp_email, send_task_assignment_email
@@ -97,11 +97,29 @@ def _create_and_send_otp(email: str, purpose: str) -> tuple[bool, str]:
 
 @app.get("/")
 def home_page():
-    return render_template("dashboard.html")
+    if session.get("user"):
+        return redirect(url_for("dashboard_page"))
+    return redirect(url_for("login_page"))
+
+
+@app.get("/login")
+def login_page():
+    if session.get("user"):
+        return redirect(url_for("dashboard_page"))
+    return render_template("login.html")
+
+
+@app.get("/register")
+def register_page():
+    if session.get("user"):
+        return redirect(url_for("dashboard_page"))
+    return render_template("register.html")
 
 
 @app.get("/dashboard")
 def dashboard_page():
+    if not session.get("user"):
+        return redirect(url_for("login_page"))
     return render_template("dashboard.html")
 
 

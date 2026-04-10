@@ -30,8 +30,11 @@ A modern multi-user Kanban task collaboration system built with Flask, MongoDB, 
 |-- requirements.txt
 |-- .env.example
 |-- templates/
+|   |-- login.html
+|   |-- register.html
 |   `-- dashboard.html
 `-- static/
+		|-- auth.js
 		`-- board.js
 ```
 
@@ -78,7 +81,10 @@ python app.py
 
 Open:
 
-- Dashboard UI (login + registration): `http://127.0.0.1:5000/`
+- Opening page: `http://127.0.0.1:5000/` (redirects to login if not authenticated)
+- Login page: `http://127.0.0.1:5000/login`
+- Registration page: `http://127.0.0.1:5000/register`
+- Dashboard page: `http://127.0.0.1:5000/dashboard`
 
 ## 2) Collections and Data Model
 

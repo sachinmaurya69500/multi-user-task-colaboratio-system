@@ -1,14 +1,10 @@
 const state = {
   user: null,
   tasks: [],
-  registerEmail: "",
-  loginEmail: "",
   draggingTaskId: null,
   movingTaskIds: new Set()
 };
 
-const authSection = document.getElementById("auth-section");
-const dashboardSection = document.getElementById("dashboard-section");
 const managerCreatePanel = document.getElementById("manager-create-panel");
 const userChip = document.getElementById("user-chip");
 const roleNote = document.getElementById("role-note");
@@ -174,23 +170,19 @@ function renderBoard() {
 }
 
 function setUiForUser() {
-  if (state.user) {
-    authSection.classList.add("hidden");
-    dashboardSection.classList.remove("hidden");
-    userChip.classList.remove("hidden");
-    userChip.textContent = `${state.user.email} (${state.user.role})`;
+  if (!state.user) {
+    window.location.href = "/login";
+    return;
+  }
 
-    if (state.user.role === "Manager") {
-      managerCreatePanel.classList.remove("hidden");
-      roleNote.textContent = "Manager view: you can see all tasks and create new assignments.";
-    } else {
-      managerCreatePanel.classList.add("hidden");
-      roleNote.textContent = "Member view: you can only see tasks assigned to you.";
-    }
+  userChip.textContent = `${state.user.email} (${state.user.role})`;
+
+  if (state.user.role === "Manager") {
+    managerCreatePanel.classList.remove("hidden");
+    roleNote.textContent = "Manager view: you can see all tasks and create new assignments.";
   } else {
-    authSection.classList.remove("hidden");
-    dashboardSection.classList.add("hidden");
-    userChip.classList.add("hidden");
+    managerCreatePanel.classList.add("hidden");
+    roleNote.textContent = "Member view: you can only see tasks assigned to you.";
   }
 }
 
@@ -239,67 +231,6 @@ async function updateTaskStatus(taskId, status) {
   }
 }
 
-async function requestRegisterOtp(event) {
-  event.preventDefault();
-  const email = document.getElementById("register-email").value.trim().toLowerCase();
-  const role = document.getElementById("register-role").value;
-
-  const payload = await api("/auth/register/request-otp", {
-    method: "POST",
-    body: JSON.stringify({ email, role })
-  });
-
-  state.registerEmail = email;
-  document.getElementById("register-otp").focus();
-  showToast(payload.message || "Registration OTP sent");
-}
-
-async function verifyRegisterOtp(event) {
-  event.preventDefault();
-  const otp = document.getElementById("register-otp").value.trim();
-  const email = state.registerEmail || document.getElementById("register-email").value.trim().toLowerCase();
-
-  const payload = await api("/auth/register/verify", {
-    method: "POST",
-    body: JSON.stringify({ email, otp })
-  });
-
-  state.user = payload.user;
-  setUiForUser();
-  await loadTasks();
-  showToast("Registration complete and logged in");
-}
-
-async function requestLoginOtp(event) {
-  event.preventDefault();
-  const email = document.getElementById("login-email").value.trim().toLowerCase();
-
-  const payload = await api("/auth/login/request-otp", {
-    method: "POST",
-    body: JSON.stringify({ email })
-  });
-
-  state.loginEmail = email;
-  document.getElementById("login-otp").focus();
-  showToast(payload.message || "Login OTP sent");
-}
-
-async function verifyLoginOtp(event) {
-  event.preventDefault();
-  const otp = document.getElementById("login-otp").value.trim();
-  const email = state.loginEmail || document.getElementById("login-email").value.trim().toLowerCase();
-
-  const payload = await api("/auth/login/verify", {
-    method: "POST",
-    body: JSON.stringify({ email, otp })
-  });
-
-  state.user = payload.user;
-  setUiForUser();
-  await loadTasks();
-  showToast("Logged in");
-}
-
 async function createTask(event) {
   event.preventDefault();
   const title = document.getElementById("task-title").value.trim();
@@ -319,46 +250,11 @@ async function createTask(event) {
 
 async function logout() {
   await api("/auth/logout", { method: "POST" });
-  state.user = null;
-  state.tasks = [];
-  setUiForUser();
-  showToast("Logged out");
+  window.location.href = "/login";
 }
 
 async function initialize() {
   setupDropzones();
-
-  document.getElementById("register-request-form").addEventListener("submit", async (event) => {
-    try {
-      await requestRegisterOtp(event);
-    } catch (error) {
-      showToast(error.message, true);
-    }
-  });
-
-  document.getElementById("register-verify-form").addEventListener("submit", async (event) => {
-    try {
-      await verifyRegisterOtp(event);
-    } catch (error) {
-      showToast(error.message, true);
-    }
-  });
-
-  document.getElementById("login-request-form").addEventListener("submit", async (event) => {
-    try {
-      await requestLoginOtp(event);
-    } catch (error) {
-      showToast(error.message, true);
-    }
-  });
-
-  document.getElementById("login-verify-form").addEventListener("submit", async (event) => {
-    try {
-      await verifyLoginOtp(event);
-    } catch (error) {
-      showToast(error.message, true);
-    }
-  });
 
   document.getElementById("create-task-form").addEventListener("submit", async (event) => {
     try {
@@ -380,12 +276,9 @@ async function initialize() {
     const payload = await api("/auth/me", { method: "GET" });
     state.user = payload.user || null;
     setUiForUser();
-    if (state.user) {
-      await loadTasks();
-    }
+    await loadTasks();
   } catch (error) {
-    state.user = null;
-    setUiForUser();
+    window.location.href = "/login";
   }
 }
 
