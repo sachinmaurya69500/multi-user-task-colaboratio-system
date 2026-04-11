@@ -26,6 +26,18 @@ ALLOWED_ROLES = ["Manager", "Member"]
 OTP_TTL_MINUTES = int(os.getenv("OTP_TTL_MINUTES", "10"))
 
 
+def _is_expired(expires_at: datetime | None) -> bool:
+    if not expires_at:
+        return True
+
+    # PyMongo may deserialize datetimes as naive UTC; normalize both sides before comparing.
+    if expires_at.tzinfo is None:
+        now = datetime.utcnow()
+    else:
+        now = datetime.now(timezone.utc)
+    return expires_at < now
+
+
 def serialize_task(task: dict) -> dict:
     return {
         "id": str(task["_id"]),
@@ -171,7 +183,7 @@ def verify_register_otp():
     otp_data = user.get("otp") or {}
     if otp_data.get("purpose") != "register":
         return jsonify({"ok": False, "error": "No registration OTP found"}), 400
-    if not otp_data.get("expires_at") or otp_data["expires_at"] < datetime.now(timezone.utc):
+    if _is_expired(otp_data.get("expires_at")):
         return jsonify({"ok": False, "error": "OTP expired"}), 400
     if not verify_otp(otp, otp_data.get("hash", "")):
         return jsonify({"ok": False, "error": "Invalid OTP"}), 400
@@ -223,7 +235,7 @@ def verify_login_otp():
     otp_data = user.get("otp") or {}
     if otp_data.get("purpose") != "login":
         return jsonify({"ok": False, "error": "No login OTP found"}), 400
-    if not otp_data.get("expires_at") or otp_data["expires_at"] < datetime.now(timezone.utc):
+    if _is_expired(otp_data.get("expires_at")):
         return jsonify({"ok": False, "error": "OTP expired"}), 400
     if not verify_otp(otp, otp_data.get("hash", "")):
         return jsonify({"ok": False, "error": "Invalid OTP"}), 400

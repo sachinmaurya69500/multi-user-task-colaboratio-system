@@ -24,9 +24,19 @@ async function api(url, options = {}) {
   };
 
   const response = await fetch(url, config);
-  const payload = await response.json();
+  const contentType = response.headers.get("content-type") || "";
+  let payload = null;
+
+  if (contentType.includes("application/json")) {
+    payload = await response.json();
+  } else {
+    const text = await response.text();
+    const compact = (text || "").replace(/\s+/g, " ").trim();
+    throw new Error(compact ? `Server returned non-JSON response: ${compact.slice(0, 120)}` : "Server returned non-JSON response");
+  }
+
   if (!response.ok || payload.ok === false) {
-    throw new Error(payload.error || "Request failed");
+    throw new Error(payload.error || payload.message || "Request failed");
   }
   return payload;
 }
